@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePokemonFormRequest;
 use App\Repositories\PokemonRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -77,5 +78,9 @@ class PokemonController extends Controller
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()]);
         }
+    }
+    public function createForm(CreatePokemonFormRequest $request): View {
+        dd($request->all());
+        return view('pokemon.createForm');
     }
 }
