@@ -20,7 +20,7 @@
         public function rules(): array {
             return [
                 "name" => "required|string|min:3",
-                "number" => "required|integer|unique:pokemon, number",
+                "number" => "required|integer|unique:pokemon,number",
                 "hp" => "required|integer",
                 "attack" => "required|integer",
                 "defense" => "required|integer",
