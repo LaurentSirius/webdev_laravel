@@ -24,23 +24,19 @@
             $pokemonData = Arr::only($args, $this->model->getFillable());
             $descriptionData = Arr::only($args, (new PokemonDescription())->getFillable());
 
-            $types = [
-                ...$this->formatTypeWeakness($args['types'], false),
-                ...$this->formatTypeWeakness($args['weaknesses'], true)
-            ];
+            // Format types + faiblesses
+            $types = array_merge(
+                $this->formatTypeWeakness($args['types'] ?? [], false),
+                $this->formatTypeWeakness($args['weaknesses'] ?? [], true)
+            );
 
             /** @var Pokemon $pokemon */
             $pokemon = parent::create($pokemonData);
             $pokemon->description()->create($descriptionData);
 
-            // Gestion des types et faiblesses via pivot (si fourni)
-            /*if (!empty($args['types']) && is_array($args['types'])) {
-                $pokemon->types()->sync($args['types']); // Utilise sync pour éviter doublons et remplacer existants
-            }*/
+            // Utilise sync() pour éviter doublons
             if (!empty($types)) {
-                foreach ($types as $type) {
-                    $pokemon->types()->attach($type);
-                }
+                $pokemon->types()->sync($types);
             }
 
             return $pokemon->fresh(['description', 'types']);
@@ -93,12 +89,10 @@
         }
 
         private function formatTypeWeakness(array $data, bool $isWeakness): array {
-            return array_map(function ($item) use ($isWeakness) {
-                return [
-                    $item => [
-                        "is_weakness" => $isWeakness
-                    ]
-                ];
-            }, $data);
+            $result = [];
+            foreach ($data as $typeId) {
+                $result[$typeId] = ['is_weakness' => $isWeakness];
+            }
+            return $result;
         }
     }

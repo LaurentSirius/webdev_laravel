@@ -95,31 +95,19 @@
          */
         public function store(CreatePokemonFormRequest $request): RedirectResponse {
             try {
-                // Utilise le Repository pour cohérence
+                // Le Repository gère TOUT : pokemon + description + types/faiblesses
                 $pokemon = app(PokemonRepository::class)->create($request->validated());
-
-                // Gestion des types et faiblesses via pivot avec is_weakness
-                $typeSync = [];
-                $weaknessSync = [];
-
-                foreach ($request->types ?? [] as $typeId) {
-                    $typeSync[$typeId] = ['is_weakness' => false];
-                }
-                foreach ($request->weaknesses ?? [] as $typeId) {
-                    $weaknessSync[$typeId] = ['is_weakness' => true];
-                }
-
-                $pokemon->types()->sync(array_merge($typeSync, $weaknessSync));
 
                 return redirect()
                     ->route('pokemon.index')
                     ->with('success', 'Pokémon créé avec succès !');
 
             } catch (\Exception $e) {
+                \Log::error('STORE ERROR', ['error' => $e->getMessage()]);
                 return redirect()
                     ->back()
                     ->withInput()
-                    ->withErrors(['error' => 'Erreur lors de la création : ' . $e->getMessage()]);
+                    ->withErrors(['error' => 'Échec : ' . $e->getMessage()]);
             }
         }
     }
