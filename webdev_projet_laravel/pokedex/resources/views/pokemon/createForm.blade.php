@@ -46,7 +46,7 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700">Points de vie (HP)</label>
                 <input type="number"
-                       name="HP"
+                       name="hp"
                        value="{{ old('HP') }}"
                        min="1"
                        max="255"
