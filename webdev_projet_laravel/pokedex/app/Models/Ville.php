@@ -3,18 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Ville extends Model
 {
     protected $table = 'villes';
     protected $primaryKey = 'id';
-    public $incrementing = false;
+    public $incrementing = true;
     protected $keyType = 'bigint';
 
-    protected $fillable = ['id', 'name', 'champion'];
+    protected $fillable = ['name', 'champion'];
 
-    public function champion()
+    public function champion(): BelongsTo
     {
-        return $this->belongsTo(Dresseur::class, 'champion', 'id');
+        return $this->belongsTo(Dresseur::class, 'champion');
     }
 }

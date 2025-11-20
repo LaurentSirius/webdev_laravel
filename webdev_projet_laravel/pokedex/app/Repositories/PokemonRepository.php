@@ -8,6 +8,7 @@
     use Illuminate\Database\Eloquent\Collection;
     use Illuminate\Http\Resources\Json\JsonResource;
     use Illuminate\Support\Arr;
+    use Illuminate\Database\Eloquent\Model;
 
     class PokemonRepository extends BaseRepository {
         public function __construct(Pokemon $pokemon) {
@@ -20,26 +21,29 @@
          * @param array $args Données incluant pokemonData, descriptionData, et 'types' structuré comme [type_id => ['is_weakness' => bool]]
          * @return Pokemon
          */
-        public function create(array $args): Pokemon {
-            $pokemonData = Arr::only($args, $this->model->getFillable());
-            $descriptionData = Arr::only($args, (new PokemonDescription())->getFillable());
+        public function create(array $data): Model {
+            // Sépare les types et faiblesses
+            $types = $data['types'] ?? [];
+            $weaknesses = $data['weaknesses'] ?? [];
+            unset($data['types'], $data['weaknesses']);
 
-            // Format types + faiblesses
-            $types = array_merge(
-                $this->formatTypeWeakness($args['types'] ?? [], false),
-                $this->formatTypeWeakness($args['weaknesses'] ?? [], true)
-            );
+            // Crée le Pokémon
+            $pokemon = Pokemon::create($data);
 
-            /** @var Pokemon $pokemon */
-            $pokemon = parent::create($pokemonData);
-            $pokemon->description()->create($descriptionData);
-
-            // Utilise sync() pour éviter doublons
-            if (!empty($types)) {
-                $pokemon->types()->sync($types);
+            // Prépare les données pour sync()
+            $syncData = [];
+            foreach ($types as $typeId) {
+                $syncData[$typeId] = ['is_weakness' => 0];
+            }
+            foreach ($weaknesses as $typeId) {
+                $syncData[$typeId] = ['is_weakness' => 1];
             }
 
-            return $pokemon->fresh(['description', 'types']);
+            // Sync unique : écrase tout à chaque création (parfait pour un formulaire create)
+            $pokemon->typesAndWeaknesses()->sync($syncData);
+
+            // Retourne avec les relations chargées
+            return $pokemon->load(['types', 'weaknesses']);
         }
 
         /**

@@ -1,16 +1,12 @@
 <?php
 
-namespace App\Models;
+    namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+    use Illuminate\Database\Eloquent\Model;
 
-class Type extends Model {
-    protected $table = 'types';
-    protected $primaryKey = 'id';
-    public $incrementing = false; // important car id est manuel
-    protected $keyType = 'bigint';
-
-    // AJOUTE ÇA :
-    protected $fillable = ['id', 'name', 'color_code'];
-}
+    class Type extends Model {
+        /*public $incrementing = false;*/ // important car id est manuel
+        protected $table = 'types';
+        public $incrementing = true;        // Laisse Laravel gérer l’auto-incrément (pas sur de ca) TODO
+        protected $fillable = ['name', 'color_code'];
+    }

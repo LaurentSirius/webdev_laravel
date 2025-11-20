@@ -7,8 +7,6 @@
 
         <div class="left">
             <img src="https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/detail/001.png" alt="pokemon" />
-
-
         </div>
         <div class="right">
             @if(!empty($pokemon->description))

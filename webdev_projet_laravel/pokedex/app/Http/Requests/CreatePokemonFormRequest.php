@@ -31,8 +31,8 @@
                 "types.*" => "integer|min:1|exists:types,id",
                 "weaknesses" => "required|array",
                 "weaknesses.*" => "integer|min:1|exists:types,id",
-                'size' => 'required|decimal:1,2',
-                'weight' => 'required|decimal:1,2',
+                'size' => 'required|numeric',
+                'weight' => 'required|numeric',
                 "sex" => "required|integer|in:0,1,2",
                 "description" => "required|string",
             ];

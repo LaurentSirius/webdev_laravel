@@ -1,11 +1,13 @@
 <div class="pokemon-list-card">
-    <img src="https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/detail/001.png" alt="pokemon" />
+    <img src="https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/detail/001.png"
+         alt="pokemon"/>
     <div>
         <p class="number">N° {{ str_pad($pokemon->number, 4, 0, STR_PAD_LEFT) }}</p>
         <p class="name">{{ $pokemon->name  }}</p>
         <ul class="pokemon-list-card--types">
             @foreach($pokemon->types as $type)
-                <x-pokemon.type-tag :name="$type->name" :color="$type->color_code" />
+                <x-pokemon.type-tag :name="$type->name"
+                                    :color="$type->color_code"/>
             @endforeach
         </ul>
     </div>

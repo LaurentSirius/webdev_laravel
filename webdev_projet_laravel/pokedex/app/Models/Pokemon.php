@@ -3,36 +3,46 @@
     namespace App\Models;
 
     use Illuminate\Database\Eloquent\Model;
+    use Illuminate\Database\Eloquent\Relations\BelongsTo;
     use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+    use Illuminate\Database\Eloquent\Relations\HasMany;
     use Illuminate\Database\Eloquent\Relations\HasOne;
 
     class Pokemon extends Model {
         protected $table = 'pokemon';
-        protected $primaryKey = 'id';
-
         protected $fillable = [
-            'number',
-            'name',
-            'HP',
-            'attack',
-            'defense',
-            'speed',
-            'evolve_from',
-            'evolve_to',
-            'evolution_step'
+            'number', 'name', 'hp', 'attack', 'defense', 'speed',
+            /*'size', 'weight', 'sex', 'description',*/
+            'evolve_from', 'evolve_to', 'evolution_step'
         ];
 
-        #region RELATIONS
-
-        // Relation one-to-one avec la PokemonDescription
-        public function description(): HasOne {
-            return $this->hasOne(PokemonDescription::class);
+        // Types du Pokémon
+        public function types(): BelongsToMany {
+            return $this->belongsToMany(Type::class, 'pokemon_types_weaknesses')
+                ->wherePivot('is_weakness', 0);
         }
 
-        // Relation many-to-many avec la table types (au travers de la table pokemon_types_weaknesses)
-        public function types(): BelongsToMany {
+        // Faiblesses du Pokémon
+        public function weaknesses(): BelongsToMany {
+            return $this->belongsToMany(Type::class, 'pokemon_types_weaknesses')
+                ->wherePivot('is_weakness', 1);
+        }
+
+        // Tous les liens (types + faiblesses) – utilisé pour sync()
+        public function allTypesAndWeaknesses(): BelongsToMany {
             return $this->belongsToMany(Type::class, 'pokemon_types_weaknesses')
                 ->withPivot('is_weakness');
         }
-        #endregion
+
+        public function descriptions(): HasOne {
+            return $this->hasOne(PokemonDescription::class);
+        }
+
+        public function evolveFrom(): BelongsTo {
+            return $this->belongsTo(Pokemon::class, 'evolve_from');
+        }
+
+        public function evolveTo(): BelongsTo {
+            return $this->belongsTo(Pokemon::class, 'evolve_to');
+        }
     }
