@@ -5,16 +5,8 @@
     use Illuminate\Support\Facades\Route;
 
     Route::get('/', function () {
-        return view('welcome');
+        return redirect()->route('pokemon.list');
     });
-
-    /*Route::prefix('pokemon')->name('pokemon.')->group(function () {
-        Route::get('/', [PokemonController::class, 'getPokedexList'])->name('index');
-        Route::get('/create', [PokemonController::class, 'createForm'])->name('create');
-        Route::post('/create', [PokemonController::class, 'store'])->name('store');
-        Route::get('/{id}', [PokemonController::class, 'show'])->name('show');
-        Route::post('/', [PokemonController::class, 'create'])->name('create'); // Gardé pour API, mais si pure web, supprime
-    });*/
 
     // === USERS ===
     Route::prefix('users')->group(function () {
@@ -25,13 +17,9 @@
     });
 
     // === POKÉMON ===
-    Route::prefix('pokemon')->group(function () {
-        /*Route::get('/create', [PokemonController::class, 'createForm']);
-        Route::post('/', [PokemonController::class, 'store'])->name('pokemon.store');
-        Route::get('/{id}', [PokemonController::class, 'show'])->name('pokemon.show');
-        Route::get('/', [PokemonController::class, 'getPokedexList'])->name('pokemon.list');
-        Route::post('/', [PokemonController::class, 'create'])->name('pokemon.create');
-
+    Route::prefix('pokemon')->middleware('auth')->group(function () {
+    /*Route::prefix('pokemon')->group(function () {*/
+        /*
         // 1. Routes statiques D'ABORD (create, etc.)
         Route::get('/create', [PokemonController::class, 'createForm']);
 
@@ -43,10 +31,10 @@
         // Les autres routes
         Route::get('/', [PokemonController::class, 'getPokedexList'])->name('pokemon.list');
         Route::post('/', [PokemonController::class, 'store'])->name('pokemon.store');*/
+
         Route::get('/create', [PokemonController::class, 'createForm']);
 
-        /*Route::get('/', [PokemonController::class, 'getPokedexList'])->name('pokemon.list');*/
-        Route::get('/', [PokemonController::class, 'getPokedexList'])->name('pokemon.index');
+        Route::get('/', [PokemonController::class, 'getPokedexList'])->name('pokemon.list');
 
         Route::post('/', [PokemonController::class, 'store'])->name('pokemon.store');
 

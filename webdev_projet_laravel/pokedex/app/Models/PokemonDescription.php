@@ -15,7 +15,7 @@
 
         // la description n'appartient qu'à un et un seul pokemon.
         public function pokemon(): BelongsTo {
-            return $this->belongsTo(Pokemon::class, 'pokemon_id', 'id');
+            return $this->belongsTo(Pokemon::class, 'pokemon_id');
         }
         #endregion
     }

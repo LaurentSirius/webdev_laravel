@@ -3,9 +3,9 @@
 @section('content')
         <section>
             <ul class="pokemon-list">
-                @foreach($pokemons as $pokemon)
-                    <a href="/pokemon/{{$pokemon->id}}">
-                        <x-pokemon.list.pokemon-card :pokemon="$pokemon" />
+                @foreach($pokemon as $poke)
+                    <a href="/pokemon/{{$poke->id}}">
+                        <x-pokemon.list.pokemon-card :pokemon="$poke" />
                     </a>
                 @endforeach
             </ul>

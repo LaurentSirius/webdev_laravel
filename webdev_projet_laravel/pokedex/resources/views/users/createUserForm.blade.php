@@ -76,12 +76,12 @@
                     class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition transform hover:scale-105">
                 Créer mon compte
             </button>
+            <p class="text-sm text-gray-600">Retour
+                <a href="{{route('login')}}"
+                class="font-medium text-indigo-600 hover:text-indigo-500 underline">
+                    Retour
+                </a>
+            </p>
         </form>
-
-        <p class="mt-6 text-center text-sm text-gray-600">
-            Déjà un compte ?
-            <a href="{{ route('login') }}"
-               class="text-indigo-600 hover:underline font-medium">Se connecter</a>
-        </p>
     </div>
 </div>

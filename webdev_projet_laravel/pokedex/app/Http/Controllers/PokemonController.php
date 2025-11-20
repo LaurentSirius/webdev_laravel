@@ -76,8 +76,8 @@
         // === WEB VIEWS (HTML) ===
 
         public function getPokedexList(): View {
-            $pokemons = app(PokemonRepository::class)->getPokedexList();
-            return view('pokemon.index', compact('pokemons'));
+            $pokemon = app(PokemonRepository::class)->getPokedexList();
+            return view('pokemon.list', compact('pokemon'));
         }
 
         // === FORMULAIRE DE CRÉATION ===
@@ -87,7 +87,7 @@
          */
         public function createForm(): View {
             $types = Type::all();
-            return view('pokemon.createForm', compact('types'));
+            return view('pokemon.createPokemonForm', compact('types'));
         }
 
         /**
